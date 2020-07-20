@@ -96,11 +96,10 @@ class Safra extends BoletoAbstract
         }
 
         $agencia = self::zeroFill($this->getAgencia(), 5);
-        $conta = self::zeroFill($this->getConta(), 9);
+        $conta = self::zeroFill($this->getConta(), 8) . self::zeroFill($this->getContaDv(), 1);
         $sequencial = self::zeroFill($this->getSequencial(), 9);
-        $tipoCobranca = self::zeroFill($this->getCarteira(), 1);
 
-        return $this->campoLivre = '7' . $agencia . $conta . $sequencial . $tipoCobranca;
+        return $this->campoLivre = '7' . $agencia . $conta . $sequencial . '2';
     }
 
     /**
