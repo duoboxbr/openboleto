@@ -16,17 +16,17 @@ class SafraTest extends KernelTestCaseAncestor
         $instance = new Safra(array(
             // Parâmetros obrigatórios
             'dataVencimento' => new \DateTime('2020-08-01'),
-            'valor' => 10.50,
-            'sequencial' => 12345678, // 8 dígitos
-            'agencia' => 1724, // 4 dígitos
-            'carteira' => 112, // 3 dígitos
-            'conta' => 12345, // 5 dígitos
-            'contaDv' => 1, // 5 dígitos
+            'valor' => 51.23,
+            'sequencial' => 11, // 8 dígitos
+            'agencia' => 17800, // 4 dígitos
+            'carteira' => 1, // 3 dígitos
+            'conta' => 582037, // 5 dígitos
+            'contaDv' => 8, // 5 dígitos
 
             // Parâmetro obrigatório somente se a carteira for
             // 107, 122, 142, 143, 196 ou 198
             'codigoCliente' => 12345, // 5 dígitos
-            'numeroDocumento' => 1234567, // 7 dígitos
+            'numeroDocumento' => 11, // 7 dígitos
         ));
 
         $this->assertInstanceOf('OpenBoleto\\Banco\\Safra', $instance);
@@ -38,17 +38,18 @@ class SafraTest extends KernelTestCaseAncestor
     {
         $instance = new Safra(array(
             // Parâmetros obrigatórios
-            'dataVencimento' => new \DateTime('2013-01-01'),
-            'valor' => 10.50,
-            'sequencial' => 12345678, // 8 dígitos
-            'agencia' => 1724, // 4 dígitos
-            'carteira' => 107, // 3 dígitos
-            'conta' => 12345, // 5 dígitos
+            'dataVencimento' => new \DateTime('2020-08-01'),
+            'valor' => 51.23,
+            'sequencial' => 11, // 8 dígitos
+            'agencia' => 17800, // 4 dígitos
+            'carteira' => 1, // 3 dígitos
+            'conta' => 582037, // 5 dígitos
+            'contaDv' => 8, // 5 dígitos
 
             // Parâmetro obrigatório somente se a carteira for
             // 107, 122, 142, 143, 196 ou 198
-            'codigoCliente' => 66677, // 5 dígitos
-            'numeroDocumento' => 1234567, // 7 dígitos
+            'codigoCliente' => 12345, // 5 dígitos
+            'numeroDocumento' => 11, // 7 dígitos
         ));
 
         $this->assertInstanceOf('OpenBoleto\\Banco\\Safra', $instance);
