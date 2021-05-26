@@ -91,10 +91,6 @@ class Safra extends BoletoAbstract
      */
     public function getCampoLivre()
     {
-        if ($this->campoLivre) {
-            return $this->campoLivre;
-        }
-
         $agencia = self::zeroFill($this->getAgencia(), 5);
         $conta = self::zeroFill($this->getConta(), 8) . self::zeroFill($this->getContaDv(), 1);
         $sequencial = self::zeroFill($this->getSequencial(), 9);
