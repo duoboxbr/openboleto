@@ -292,6 +292,16 @@ abstract class BoletoAbstract
      * @var array
      */
     protected $imprimeInstrucoesImpressao = true;
+
+    /**
+     * @var string $copiaEcola
+     */
+    protected $copiaEcola;
+
+    /**
+     * @var string $textoPix
+     */
+    protected $textoPix;
     
     
     /**
@@ -327,6 +337,38 @@ abstract class BoletoAbstract
         if (!$this->getResourcePath()) {
             $this->setResourcePath(__DIR__ . '/../../resources');
         }
+    }
+
+    /**
+     * @return string
+     */
+    public function getCopiaEcola()
+    {
+        return $this->copiaEcola;
+    }
+
+    /**
+     * @param string $copiaEcola
+     */
+    public function setCopiaEcola($copiaEcola)
+    {
+        $this->copiaEcola = $copiaEcola;
+    }
+
+    /**
+     * @return string
+     */
+    public function getTextoPix()
+    {
+        return $this->textoPix;
+    }
+
+    /**
+     * @param string $textoPix
+     */
+    public function setTextoPix($textoPix)
+    {
+        $this->textoPix = $textoPix;
     }
 
     /**
@@ -1278,7 +1320,9 @@ abstract class BoletoAbstract
             'codigo_barras' => $this->getImagemCodigoDeBarras(),
             'resource_path' => $this->getResourcePath(),
             'numero_febraban' => $this->getNumeroFebraban(),
-            'imprime_instrucoes_impressao' => $this->getImprimeInstrucoesImpressao()
+            'imprime_instrucoes_impressao' => $this->getImprimeInstrucoesImpressao(),
+            "copiaecola" => $this->getCopiaEcola(),
+            "textoPix" => $this->getTextoPix()
         );
         
         
