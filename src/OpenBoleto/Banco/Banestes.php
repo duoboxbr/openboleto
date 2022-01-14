@@ -52,7 +52,7 @@ class Banestes extends BoletoAbstract
         $campoLivre = self::zeroFill(substr($this->getNossoNumero(false), 0, 8), 8) .
             self::zeroFill($this->getConta(), 11) .
             self::COBRANCA_COM_REGISTRO .
-            self::zeroFill((int)$this->getCedente(), 3) .
+            self::zeroFill($this->codigoBanco, 3) .
             self::zeroFill($digitoVerificador, 2);
 
         return $campoLivre;
