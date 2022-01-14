@@ -6,6 +6,9 @@ use OpenBoleto\BoletoAbstract;
 
 class Banestes extends BoletoAbstract
 {
+    const CARTEIRA_SIMPLES = 1;
+    const CARTEIRA_CAUCIONADA = 3;
+    const COBRANCA_COM_REGISTRO = 4;
     const COBRANCA_SIMPLES = 1;
 
     /**
@@ -34,18 +37,25 @@ class Banestes extends BoletoAbstract
 
     protected function gerarNossoNumero()
     {
-        $sequencial = self::zeroFill($this->getSequencial(), 10);
-        return $sequencial . '-' . static::modulo10($sequencial);
+        $sequencial = self::zeroFill($this->getSequencial(), 8);
+        $d1 = static::modulo10($sequencial);
+        $d2 = static::modulo11($d1, 9);
+        return $sequencial . '-' . $d1 . $d2["digito"];
     }
 
     public function getCampoLivre()
     {
-        return self::zeroFill($this->getCodigoBanco(), 3) .
-            self::zeroFill($this->getMoeda(), 1) .
-            self::zeroFill($this->gerarDigitoVerificador(), 1) .
-            self::zeroFill(self::getFatorVencimento(), 4) .
-            self::zeroFill($this->getValor(), 10) .
-            self::zeroFill($this->gerarChaveAsbace(), 25);
+        $d1 = static::modulo10($this->getSequencial());
+        $d2 = static::modulo11($d1, 9);
+        $digitoVerificador = $d1 . $d2["digito"];
+
+        $campoLivre = self::zeroFill(substr($this->getNossoNumero(false), 0, 8), 8) .
+            self::zeroFill($this->getConta(), 11) .
+            self::COBRANCA_COM_REGISTRO .
+            self::zeroFill((int)$this->getCedente(), 3) .
+            self::zeroFill($digitoVerificador, 2);
+
+        return $campoLivre;
     }
 
     public function gerarDigitoVerificador(): string
@@ -62,23 +72,19 @@ class Banestes extends BoletoAbstract
 
         $chave = $nossoNumero . $conta . $tipoCobranca . $this->codigoBanco;
 
-//        $d1 = $this->calcularD1($chave);
-//        $d2 = $this->calcularD2($chave, $d1);
-//        return $chave . $d1 . $d2;
-
         $d1 = self::modulo10($chave);
         $d2 = self::modulo11($chave, $d1);
 
         return $chave . $d1 . $d2["digito"];
     }
 
-    public function calcularD1(string $chave): string
+    protected static function modulo10($num)
     {
         $d1 = $k = $s = 0;
         $peso = 2;
 
-        for ($x = 0; $x < strlen($chave); $x++) {
-            $valor = (int)$chave[$x];
+        for ($i = 0; $i < strlen($num); $i++) {
+            $valor = $num[$i];
 
             $p = $valor * $peso;
 
@@ -91,7 +97,6 @@ class Banestes extends BoletoAbstract
             }
 
             $s += $k;
-
             $peso = $peso == 2 ? 1 : 2;
         }
 
@@ -102,40 +107,5 @@ class Banestes extends BoletoAbstract
         }
 
         return $d1;
-    }
-
-    public function calcularD2(string $chave, int $d1): string
-    {
-        $d2 = $k = $s = 0;
-        $peso = 2;
-
-        $chaveD1 = $chave . $d1;
-
-        for ($x = 0; $x < strlen($chaveD1); $x++) {
-            $valor = (int)$chaveD1[$x];
-
-            $p = $valor * $peso--;
-
-            $s += $p;
-
-            if ($peso == 1) {
-                $peso = 7;
-            }
-        }
-        $resto = $s % 11;
-
-        if ($resto == 1) {
-            $d1++;
-            if ($d1 == 10) {
-                $d1 = 0;
-            }
-            return $this->calcularD2($chave, $d1);
-        }
-
-        if ($resto > 1) {
-            $d2 = 11 - $resto;
-        }
-
-        return $d2;
     }
 }
