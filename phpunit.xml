@@ -12,8 +12,5 @@
         <testsuite name="core">
             <directory suffix=".php">tests</directory>
         </testsuite>
-        <testsuite name="banestes">
-            <directory suffix=".php">tests/OpenBoleto/Banco/Banestes</directory>
-        </testsuite>
     </testsuites>
 </phpunit>
