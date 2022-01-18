@@ -9,7 +9,6 @@ class Banestes extends BoletoAbstract
     const CARTEIRA_SIMPLES = 1;
     const CARTEIRA_CAUCIONADA = 3;
     const COBRANCA_COM_REGISTRO = 4;
-    const COBRANCA_SIMPLES = 1;
 
     /**
      * Código do banco
@@ -39,23 +38,21 @@ class Banestes extends BoletoAbstract
     {
         $sequencial = self::zeroFill($this->getSequencial(), 8);
         $d1 = static::modulo10($sequencial);
-        $d2 = static::modulo11($d1, 9);
+        $d2 = static::modulo11($d1);
         return $sequencial . '-' . $d1 . $d2["digito"];
     }
 
     public function getCampoLivre()
     {
-        $d1 = static::modulo10($this->getSequencial());
-        $d2 = static::modulo11($d1, 9);
-        $digitoVerificador = $d1 . $d2["digito"];
+        $nossoNumero = self::zeroFill(substr($this->getNossoNumero(false), 0, 8), 8);
+        $conta = self::zeroFill(str_replace('-', '', $this->getConta()), 11);
 
-        $campoLivre = self::zeroFill(substr($this->getNossoNumero(false), 0, 8), 8) .
-            self::zeroFill($this->getConta(), 11) .
-            self::COBRANCA_COM_REGISTRO .
-            self::zeroFill($this->codigoBanco, 3) .
-            self::zeroFill($digitoVerificador, 2);
+        $chave = $nossoNumero . $conta . self::COBRANCA_COM_REGISTRO . $this->codigoBanco;
 
-        return $campoLivre;
+        $d1 = self::modulo10($chave);
+        $d2 = self::modulo11( $chave . $d1, 7);
+
+        return $chave . $d1 . $d2["digito"];
     }
 
     public function gerarDigitoVerificador(): string
@@ -64,21 +61,7 @@ class Banestes extends BoletoAbstract
         return static::modulo10($sequencial);
     }
 
-    public function gerarChaveAsbace(): string
-    {
-        $nossoNumero = self::zeroFill(substr($this->gerarNossoNumero(), 0, 8), 8);
-        $conta = self::zeroFill(str_replace('-', '', $this->getConta()), 11);
-        $tipoCobranca = self::COBRANCA_SIMPLES;
-
-        $chave = $nossoNumero . $conta . $tipoCobranca . $this->codigoBanco;
-
-        $d1 = self::modulo10($chave);
-        $d2 = self::modulo11($chave, $d1);
-
-        return $chave . $d1 . $d2["digito"];
-    }
-
-    protected static function modulo10($num)
+    private static function modulo10Asbace($num)
     {
         $d1 = $k = $s = 0;
         $peso = 2;
