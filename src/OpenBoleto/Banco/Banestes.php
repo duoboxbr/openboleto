@@ -37,9 +37,9 @@ class Banestes extends BoletoAbstract
     protected function gerarNossoNumero()
     {
         $sequencial = self::zeroFill($this->getSequencial(), 8);
-        $d1 = static::modulo10($sequencial);
-        $d2 = static::modulo11($sequencial . $d1, 10);
-        return $sequencial . '-' . $d1 . $d2["digito"];
+        $d1 = static::modulo11($sequencial);
+        $d2 = static::modulo11($sequencial . $d1['digito']);
+        return $sequencial . '-' . $d1['digito'] . $d2["digito"];
     }
 
     public function getCampoLivre()

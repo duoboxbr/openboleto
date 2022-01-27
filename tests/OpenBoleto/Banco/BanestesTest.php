@@ -33,6 +33,6 @@ class BanestesTest extends TestCase
 
     public function testRetornoNossoNumero()
     {
-        $this->assertSame('0000012300', $this->banestes->getNossoNumero(false));
+        $this->assertSame('0000012360', $this->banestes->getNossoNumero(false));
     }
 }
