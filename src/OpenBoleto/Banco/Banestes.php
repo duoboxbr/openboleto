@@ -38,7 +38,7 @@ class Banestes extends BoletoAbstract
     {
         $sequencial = self::zeroFill($this->getSequencial(), 8);
         $d1 = static::modulo10($sequencial);
-        $d2 = static::modulo11($d1);
+        $d2 = static::modulo11($sequencial . $d1, 10);
         return $sequencial . '-' . $d1 . $d2["digito"];
     }
 

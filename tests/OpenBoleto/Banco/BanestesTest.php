@@ -28,11 +28,11 @@ class BanestesTest extends TestCase
 
     public function testRetornoLinhaDigitavel()
     {
-        $this->assertEquals('02190.00007 12300.004514 60154.000002 1 74860000003900', $this->banestes->getLinhaDigitavel());
+        $this->assertEquals('02190.00007 12300.004517 60154.021137 1 74860000003900', $this->banestes->getLinhaDigitavel());
     }
 
     public function testRetornoNossoNumero()
     {
-        $this->assertSame('0000012327', $this->banestes->getNossoNumero(false));
+        $this->assertSame('0000012300', $this->banestes->getNossoNumero(false));
     }
 }
