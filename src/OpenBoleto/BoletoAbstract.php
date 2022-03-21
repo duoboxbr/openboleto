@@ -297,7 +297,7 @@ abstract class BoletoAbstract
      * Define se o texto é sacador/Avalista ou beneficiario_final
      * @var string $textoBeneficiario
      */
-    protected $textoBeneficiario;
+    protected $labelSacadorAvalista ;
     
     
     /**
@@ -1285,7 +1285,7 @@ abstract class BoletoAbstract
             'resource_path' => $this->getResourcePath(),
             'numero_febraban' => $this->getNumeroFebraban(),
             'imprime_instrucoes_impressao' => $this->getImprimeInstrucoesImpressao(),
-            'texto_beneficiario' => $this->getTextoBeneficiario()
+            'label_sacador_avalista' => $this->getLabelSacadorAvalista()
         );
         
         
@@ -1536,17 +1536,17 @@ abstract class BoletoAbstract
     /**
      * @return string
      */
-    public function getTextoBeneficiario(): string
+    public function getLabelSacadorAvalista(): string
     {
-        return $this->textoBeneficiario ?? "Sacador/Avalista:";
+        return $this->labelSacadorAvalista ?? "Sacador/Avalista:";
     }
 
     /**
-     * @param string $textoBeneficiario
+     * @param string $labelSacadorAvalista
      */
-    public function setTextoBeneficiario(string $textoBeneficiario)
+    public function setLabelSacadorAvalista(string $labelSacadorAvalista)
     {
-        $this->textoBeneficiario = $textoBeneficiario;
+        $this->labelSacadorAvalista = $labelSacadorAvalista;
     }
 
     /**
