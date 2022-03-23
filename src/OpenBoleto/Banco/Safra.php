@@ -50,7 +50,7 @@ class Safra extends BoletoAbstract
      * Localização do logotipo do banco, referente ao diretório de imagens
      * @var string
      */
-    protected $logoBanco = 'safra.png';
+    protected $logoBanco = 'safra_letra.png';
 
     /**
      * Linha de local de pagamento
