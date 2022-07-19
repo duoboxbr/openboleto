@@ -49,10 +49,10 @@ class Banestes extends BoletoAbstract
 
         $chave = $nossoNumero . $conta . self::COBRANCA_COM_REGISTRO . $this->codigoBanco;
 
-        $d1 = self::modulo10($chave);
-        $d2 = self::modulo11( $chave . $d1, 7);
+        $d1 = self::modulo10Asbace($chave);
+        $d2 = self::modulo11Asbace($chave, $d1);
 
-        return $chave . $d1 . $d2["digito"];
+        return $chave . $d1 . $d2;
     }
 
     public function gerarDigitoVerificador(): string
@@ -90,5 +90,22 @@ class Banestes extends BoletoAbstract
         }
 
         return $d1;
+    }
+
+    private static function modulo11Asbace($chave, &$d1, $base = 7)
+    {
+        $d2 = self::modulo11($chave . $d1, $base);
+
+        if ($d2['resto'] == 0) {
+            $d2['digito'] = 0;
+        } elseif ($d2['resto'] == 1) {
+            $d1 += 1;
+            $d1 = ($d1 == 10) ? 0 : $d1;
+            return self::modulo11Asbace($chave, $d1, $base);
+        } elseif ($d2['resto'] > 1) {
+            $d2['digito'] = 11 - $d2['resto'];
+        }
+
+        return $d2['digito'];
     }
 }
