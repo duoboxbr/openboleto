@@ -159,9 +159,9 @@ class Itau extends BoletoAbstract
      */
     public function getCampoLivre()
     {
-        if ($this->campoLivre) {
-            return $this->campoLivre;
-        }
+//        if ($this->campoLivre) {
+//            return $this->campoLivre;
+//        }
 
         $sequencial = self::zeroFill($this->getSequencial(), 8);
         $carteira = self::zeroFill($this->getCarteira(), 3);
