@@ -26,6 +26,7 @@
 
 namespace OpenBoleto\Banco;
 
+use duobox\Cobranca\Boletos\Parser\CodigoBarraAilos;
 use OpenBoleto\BoletoAbstract;
 use OpenBoleto\Exception;
 
@@ -63,7 +64,7 @@ class Ailos extends BoletoAbstract
      * @var array
      */
     protected $carteiras = array(
-        '1', '2', '3', '4', '5'
+                '1', '2', '3', '4', '5'
     );
 
     /**
@@ -120,14 +121,18 @@ class Ailos extends BoletoAbstract
      */
     protected function gerarNossoNumero()
     {
-        $conta = self::zeroFill($this->getConta(), 8);
-        $sequencial = self::zeroFill($this->getSequencial(), 9);
 
-        $total = $conta . $sequencial;
+        $conta = self::zeroFill($this->getConta() . $this->getContaDv(), 8);
+        $sequencial = self::zeroFill($this->getNumeroDocumento(), 9);
+
+        $numero = $conta . $sequencial;
 
 
-        return $total;
+
+        return $numero;
+
     }
+
 
     public function getCampoLivre()
     {
