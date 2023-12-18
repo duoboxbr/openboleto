@@ -57,7 +57,7 @@ class Ailos extends BoletoAbstract
      * Linha de local de pagamento
      * @var string
      */
-    protected $localPagamento = 'Pagável preferencialmente no Ailos até o vencimento';
+    protected $localPagamento = 'Pagar preferencialmente nas cooperativas do Sistema AILOS.';
 
     /**
      * Define as carteiras disponíveis para este banco
