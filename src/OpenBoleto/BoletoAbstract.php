@@ -1507,8 +1507,15 @@ abstract class BoletoAbstract
     protected function getFatorVencimento()
     {
         if (!$this->getContraApresentacao()) {
-            $date = new DateTime('1997-10-07');
-            return $date->diff($this->getDataVencimento())->days;
+            $dataFator = new \DateTime('1997-10-07');
+            $dataFator2025 = new \DateTime('2025-02-22');
+            if ($this->getDataVencimento() >= $dataFator2025) {
+                $dataFator2025->modify('-1000 days'); // range de seguranca estabelecido pelo BCB
+                $interval = $this->getDataVencimento()->diff($dataFator2025);
+            } else {
+                $interval = $this->getDataVencimento()->diff($dataFator);
+            }
+            return str_pad((int)$interval->days, 4, '0', STR_PAD_LEFT);
         } else {
             return '0000';
         }
