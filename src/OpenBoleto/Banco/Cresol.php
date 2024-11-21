@@ -124,9 +124,9 @@ class Cresol extends BoletoAbstract
 
     public function getCampoLivre()
     {
-        return $this->getCodigoBanco() .
-            $this->getCarteira() .
-            self::zeroFill($this->getCarteira() . $this->getSequencial(), 11) .
+        return $this->getAgencia() .
+            self::zeroFill($this->getCarteira(), 2) .
+            self::zeroFill($this->getSequencial(), 11) .
             self::zeroFill($this->getConta(), 7) . '0';
     }
 }
