@@ -91,28 +91,6 @@ class Cresol extends BoletoAbstract
     protected $campoLivre;
 
     /**
-     * Define o número do convênio. Sempre use string pois a quantidade de caracteres é validada.
-     *
-     * @param string $convenio
-     * @return Cresol
-     */
-    public function setConvenio($convenio)
-    {
-        $this->convenio = $convenio;
-        return $this;
-    }
-
-    /**
-     * Retorna o número do convênio
-     *
-     * @return string
-     */
-    public function getConvenio()
-    {
-        return $this->convenio;
-    }
-
-    /**
      * Gera o Nosso Número.
      *
      * @return string
@@ -132,7 +110,7 @@ class Cresol extends BoletoAbstract
         $sequencial = self::zeroFill($this->getSequencial(), 11);
 
         $numero = $carteira . $sequencial;
-        $resto = static::modulo11($numero);
+        $resto = static::modulo11($numero,7);
         if ($resto['resto'] == 1) {
             $digitoVerificador = 'P';
         } elseif ($resto['resto'] == 0) {
