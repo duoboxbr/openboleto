@@ -26,6 +26,7 @@
 
 namespace OpenBoleto\Banco;
 
+use duobox\Cobranca\Boletos\Parser\CodigoBarraAilos;
 use OpenBoleto\BoletoAbstract;
 use OpenBoleto\Exception;
 
@@ -38,31 +39,51 @@ use OpenBoleto\Exception;
  * @license    MIT License
  * @version    1.0
  */
-class Safra extends BoletoAbstract
+class Ailos extends BoletoAbstract
 {
     /**
      * Código do banco
      * @var string
      */
-    protected $codigoBanco = '422';
+    protected $codigoBanco = '085';
 
     /**
      * Localização do logotipo do banco, referente ao diretório de imagens
      * @var string
      */
-    protected $logoBanco = 'safra_letra.png';
+    protected $logoBanco = 'ailos.png';
 
     /**
      * Linha de local de pagamento
      * @var string
      */
-    protected $localPagamento = 'Até o vencimento Pagável em qualquer Banco';
+    protected $localPagamento = 'Pagar preferencialmente nas cooperativas do Sistema AILOS.';
 
     /**
      * Define as carteiras disponíveis para este banco
      * @var array
      */
-    protected $carteiras = array( '1', '2' );
+    protected $carteiras = array(
+                '1', '2', '3', '4', '5'
+    );
+
+    /**
+     * Campo obrigatório para emissão de boletos com carteira 198 fornecido pelo Banco com 5 dígitos
+     * @var int
+     */
+    protected $codigoCliente;
+
+    /**
+     * Dígito verificador da carteira/nosso número para impressão no boleto
+     * @var int
+     */
+    protected $carteiraDv;
+
+    /**
+     * Dígito de auto-conferência do nosso número
+     * @var int
+     */
+    protected $dacNossoNumero;
 
     /**
      * Cache do campo livre para evitar processamento desnecessário.
@@ -72,41 +93,52 @@ class Safra extends BoletoAbstract
     protected $campoLivre;
 
     /**
+     * Define o número do convênio. Sempre use string pois a quantidade de caracteres é validada.
+     *
+     * @param string $convenio
+     * @return BancoDoBrasil
+     */
+    public function setConvenio($convenio)
+    {
+        $this->convenio = $convenio;
+        return $this;
+    }
+
+    /**
+     * Retorna o número do convênio
+     *
+     * @return string
+     */
+    public function getConvenio()
+    {
+        return $this->convenio;
+    }
+
+    /**
      * Gera o Nosso Número.
      *
      * @return string
      */
     protected function gerarNossoNumero()
     {
-        $numero = self::zeroFill($this->getSequencial(), 9);
+
+        $conta = self::zeroFill($this->getConta() . $this->getContaDv(), 8);
+        $sequencial = self::zeroFill($this->getNumeroDocumento(), 9);
+
+        $numero = $conta . $sequencial;
+
+
 
         return $numero;
+
     }
 
-    /**
-     * Método para gerar o código da posição de 20 a 44
-     *
-     * @return string
-     * @throws \OpenBoleto\Exception
-     */
+
     public function getCampoLivre()
     {
-        $agencia = self::zeroFill($this->getAgencia(), 5);
-        $conta = self::zeroFill($this->getConta(), 8) . self::zeroFill($this->getContaDv(), 1);
-        $sequencial = self::zeroFill($this->getSequencial(), 9);
-
-        return $this->campoLivre = '7' . $agencia . $conta . $sequencial . '2';
-    }
-
-    /**
-     * Define nomes de campos específicos do boleto do Itaú
-     *
-     * @return array
-     */
-    public function getViewVars()
-    {
-        return array(
-            'carteira' => $this->getCarteira(), // Campo não utilizado pelo Itaú
-        );
+        return self::zeroFill($this->getConvenio(), 6) .
+            self::zeroFill($this->getConta(), 8) .
+            self::zeroFill($this->getSequencial(), 9) .
+            self::zeroFill($this->getCarteira(), 2) ;
     }
 }

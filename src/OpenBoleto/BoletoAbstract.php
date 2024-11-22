@@ -292,6 +292,12 @@ abstract class BoletoAbstract
      * @var array
      */
     protected $imprimeInstrucoesImpressao = true;
+
+    /**
+     * Define se o texto é sacador/Avalista ou beneficiario_final
+     * @var string $textoBeneficiario
+     */
+    protected $labelSacadorAvalista ;
     
     
     /**
@@ -1278,7 +1284,8 @@ abstract class BoletoAbstract
             'codigo_barras' => $this->getImagemCodigoDeBarras(),
             'resource_path' => $this->getResourcePath(),
             'numero_febraban' => $this->getNumeroFebraban(),
-            'imprime_instrucoes_impressao' => $this->getImprimeInstrucoesImpressao()
+            'imprime_instrucoes_impressao' => $this->getImprimeInstrucoesImpressao(),
+            'label_sacador_avalista' => $this->getLabelSacadorAvalista()
         );
         
         
@@ -1500,8 +1507,15 @@ abstract class BoletoAbstract
     protected function getFatorVencimento()
     {
         if (!$this->getContraApresentacao()) {
-            $date = new DateTime('1997-10-07');
-            return $date->diff($this->getDataVencimento())->days;
+            $dataFator = new \DateTime('1997-10-07');
+            $dataFator2025 = new \DateTime('2025-02-22');
+            if ($this->getDataVencimento() >= $dataFator2025) {
+                $dataFator2025->modify('-1000 days'); // range de seguranca estabelecido pelo BCB
+                $interval = $this->getDataVencimento()->diff($dataFator2025);
+            } else {
+                $interval = $this->getDataVencimento()->diff($dataFator);
+            }
+            return str_pad((int)$interval->days, 4, '0', STR_PAD_LEFT);
         } else {
             return '0000';
         }
@@ -1524,6 +1538,22 @@ abstract class BoletoAbstract
         }
 
         return $dv;
+    }
+
+    /**
+     * @return string
+     */
+    public function getLabelSacadorAvalista(): string
+    {
+        return $this->labelSacadorAvalista ?? "Sacador/Avalista:";
+    }
+
+    /**
+     * @param string $labelSacadorAvalista
+     */
+    public function setLabelSacadorAvalista(string $labelSacadorAvalista)
+    {
+        $this->labelSacadorAvalista = $labelSacadorAvalista;
     }
 
     /**
