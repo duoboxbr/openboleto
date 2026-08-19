@@ -233,7 +233,7 @@ class Agente
 
         if (preg_match('/^[0-9]{3}\.[0-9]{3}\.[0-9]{3}-[0-9]{2}$/', $documento)) {
             return 'CPF';
-        } else if (preg_match('#^[0-9]{2}\.[0-9]{3}\.[0-9]{3}/[0-9]{4}-[0-9]{2}$#', $documento)) {
+        } elseif (preg_match('#^[0-9A-Z]{2}\.[0-9A-Z]{3}\.[0-9A-Z]{3}/[0-9A-Z]{4}-[0-9]{2}$#', $documento)) {
             return 'CNPJ';
         }
 
